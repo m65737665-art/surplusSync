@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SurplusSync — Food Redistribution Platform | Connecting Surplus to Shelters</title>
+  
+  <!-- Modern Clean Typography: Plus Jakarta Sans & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Leaflet Map CSS for Geospatial Discovery & Live Tracking -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  
+  <!-- Main Unified CSS (3-File Frontend Architecture) -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-theme">
+
+  <!-- ========================================================================= -->
+  <!-- TOP NAVIGATION BAR (Adapts between Public Landing & Authenticated Portals) -->
+  <!-- ========================================================================= -->
+  <header class="app-navbar" id="app-navbar">
+    <div class="nav-container">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="brand-link" onclick="navigateTo('landing'); return false;">
+        <div class="brand-icon">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Surplus<span class="text-accent">Sync</span></span>
+          <span class="brand-tagline">Food Redistribution Platform</span>
+        </div>
+      </a>
+
+      <!-- Public Navigation Links (Visible on Landing Page) -->
+      <nav class="public-nav-links" id="public-nav-links">
+        <a href="#about" class="nav-anchor" onclick="scrollToSection('about')">About & Goals</a>
+        <a href="#how-it-works" class="nav-anchor" onclick="scrollToSection('how-it-works')">How It Works</a>
+        <a href="#differentiators" class="nav-anchor" onclick="scrollToSection('differentiators')">What Makes Us Different</a>
+        <a href="#roles" class="nav-anchor" onclick="scrollToSection('roles')">Our Roles</a>
+        <a href="#impact" class="nav-anchor" onclick="scrollToSection('impact')">Impact</a>
+        <a href="#testimonials" class="nav-anchor" onclick="scrollToSection('testimonials')">Community</a>
+      </nav>
+
+      <!-- Authenticated Portal Links (Visible when logged in to specific role) -->
+      <nav class="auth-nav-links" id="auth-nav-links" style="display: none;">
+        <!-- Injected dynamically based on role (Donor, NGO, Volunteer, Admin) -->
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="nav-actions">
+        <!-- Public Auth Buttons -->
+        <div class="public-actions" id="public-actions">
+          <button class="btn-text" onclick="openLoginModal()">Sign In</button>
+          <button class="btn-cta" onclick="openRegisterModal()">
+            <span>Get Started</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+
+        <!-- Authenticated User Profile Pill (Visible when logged in) -->
+        <div class="user-profile-pill" id="user-profile-pill" style="display: none;">
+          <img src="" alt="Avatar" id="nav-user-avatar" class="nav-avatar">
+          <div class="nav-user-text">
+            <span class="nav-user-name" id="nav-user-name">User</span>
+            <span class="nav-role-badge" id="nav-role-badge">ROLE</span>
+          </div>
+          <button class="btn-logout" onclick="logout()" title="Sign Out">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- MAIN APPLICATION VIEW ROUTER                                              -->
+  <!-- ========================================================================= -->
+  <main class="app-main-viewport">
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 1: PUBLIC LANDING PAGE (Entire Info, Goals, Objectives, Flow)      -->
+    <!-- ======================================================================= -->
+    <section id="view-landing" class="page-view active">
+      
+      <!-- HERO SECTION -->
+      <section class="hero-section">
+        <div class="hero-glow-blob blob-1"></div>
+        <div class="hero-glow-blob blob-2"></div>
+        <span class="hero-chip c1" aria-hidden="true"><i>🥗</i> Zero Food Waste</span><span class="hero-chip c2" aria-hidden="true"><i>📍</i> Live Map Matching</span>
+        <span class="hero-chip c3" aria-hidden="true"><i>🔐</i> 6-Digit OTP Handshake</span><span class="hero-chip c4" aria-hidden="true"><i>✅</i> Verified NGOs</span>
+        <div class="hero-container">
+          <div class="hero-badge">
+            <i class="fa-solid fa-seedling text-accent"></i>
+            <span>Zero Food Waste &bull; UN SDG 2 (Zero Hunger)</span>
+          </div>
+          <h1 class="hero-headline">
+            Connecting Surplus Food With<br>
+            <span class="gradient-text">Those Who Need It Most</span>
+          </h1>
+          <p class="hero-subheading">
+            A real-time redistribution network linking commercial food donors (restaurants, caterers, bakeries) 
+            with frontline shelters, NGOs, and verified volunteer couriers to eliminate hunger and greenhouse emissions.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn-hero-primary" onclick="openRegisterModal()">
+              <span>Join The Movement</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button class="btn-hero-secondary" onclick="openLoginModal()">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <span>Sign In to Your Account</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE IMPACT COUNTER TICKER -->
+      <section class="counter-strip-section" id="impact">
+        <div class="section-container">
+          <div class="counters-grid">
+            <div class="counter-card">
+              <i class="fa-solid fa-utensils counter-icon"></i>
+              <div class="counter-value" id="landing-count-meals">14,250+</div>
+              <div class="counter-label">Meals Redistributed</div>
+            </div>
+            <div class="counter-card">
+              <i class="fa-solid fa-store counter-icon"></i>
+              <div class="counter-value" id="landing-count-donors">520+</div>
+              <div class="counter-label">Active Food Donors</div>
+            </div>
+            <div class="counter-card">
+              <i class="fa-solid fa-building-ngo counter-icon"></i>
+              <div class="counter-value" id="landing-count-ngos">140+</div>
+              <div class="counter-label">Partner Shelters & NGOs</div>
+            </div>
+            <div class="counter-card">
+              <i class="fa-solid fa-bicycle counter-icon"></i>
+              <div class="counter-value" id="landing-count-volunteers">350+</div>
+              <div class="counter-label">Volunteer Couriers</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Zero Food Waste</span><span>UN SDG 2 · Zero Hunger</span><span>Live Geospatial Matching</span><span>6-Digit OTP Handshake</span><span>Verified NGOs</span><span>Certified Food Safety</span><span>Zero Food Waste</span><span>UN SDG 2 · Zero Hunger</span><span>Live Geospatial Matching</span><span>6-Digit OTP Handshake</span><span>Verified NGOs</span><span>Certified Food Safety</span><span>Zero Food Waste</span><span>UN SDG 2 · Zero Hunger</span><span>Live Geospatial Matching</span><span>6-Digit OTP Handshake</span><span>Verified NGOs</span><span>Certified Food Safety</span></div></div>
+
+      <!-- OBJECTIVES & GOALS: WHAT WE DO -->
+      <section class="info-section bg-surface" id="about">
+        <div class="section-container">
+          <div class="section-header text-center">
+            <span class="sub-pill">Our Core Mission</span>
+            <h2 class="section-title">Why SurplusSync Exists</h2>
+            <p class="section-subtitle">
+              Every day, tons of perfectly edible food from banquet events, corporate cafeterias, and restaurants 
+              are discarded into municipal landfills, while thousands in local communities suffer food insecurity.
+            </p>
+          </div>
+
+          <div class="goals-grid">
+            <div class="goal-card">
+              <div class="goal-icon-wrap icon-green">
+                <i class="fa-solid fa-bowl-food"></i>
+              </div>
+              <h3>Zero Hunger (SDG 2)</h3>
+              <p>Ensuring wholesome, freshly prepared surplus meals reach local food banks, soup kitchens, and women's shelters within hours of preparation.</p>
+            </div>
+
+            <div class="goal-card">
+              <div class="goal-icon-wrap icon-emerald">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+              </div>
+              <h3>Methane & Carbon Reduction</h3>
+              <p>Diverting organic waste from decomposing in landfills, directly preventing 2.5 kg of CO₂ equivalent greenhouse gas for every single kilogram rescued.</p>
+            </div>
+
+            <div class="goal-card">
+              <div class="goal-icon-wrap icon-blue">
+                <i class="fa-solid fa-shield-virus"></i>
+              </div>
+              <h3>Certified Food Safety</h3>
+              <p>Enforcing mandatory temperature controls (hot >60°C, chilled <4°C), packaging hygiene attestations, and strict real-time expiry countdowns.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHAT MAKES US DIFFERENT (DIFFERENTIATORS) -->
+      <section class="info-section" id="differentiators">
+        <div class="section-container">
+          <div class="section-header text-center">
+            <span class="sub-pill text-accent">Technical Excellence</span>
+            <h2 class="section-title">What Makes Our Platform Different</h2>
+            <p class="section-subtitle">
+              Unlike static bulletin boards or generic donation directories, SurplusSync is an active logistical coordinator powered by modern web standards.
+            </p>
+          </div>
+
+          <div class="differentiators-grid">
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-map-location-dot diff-icon"></i>
+                <h4>Real-Time Geospatial Matching</h4>
+              </div>
+              <p>Interactive Leaflet maps calculate distance radii, pinpointing exact proximity between donating restaurants and shelters within 5 to 60 km.</p>
+            </div>
+
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-key diff-icon"></i>
+                <h4>6-Digit Cryptographic Handshake (OTP)</h4>
+              </div>
+              <p>Zero lost deliveries. Volunteer couriers cannot mark food as collected without entering the donor's 6-digit PIN, nor delivered without the NGO's PIN.</p>
+            </div>
+
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-file-contract diff-icon"></i>
+                <h4>Mandatory NGO Certificate Verification</h4>
+              </div>
+              <p>To prevent fraudulent claims, NGOs must upload official government/charity registration certificates for administrator review before receiving surplus.</p>
+            </div>
+
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-wand-magic-sparkles diff-icon"></i>
+                <h4>AI Smart Food Extraction Assistant</h4>
+              </div>
+              <p>Busy chefs can paste natural kitchen notes or banquet menus; our NLP parser auto-fills quantity, unit, packaging, and shelf life instantly.</p>
+            </div>
+
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-chart-pie diff-icon"></i>
+                <h4>Live Environmental Impact Accounting</h4>
+              </div>
+              <p>Dynamic dashboards calculate cumulative meals served, water conserved, and equivalent trees planted with visual SVG trend charts.</p>
+            </div>
+
+            <div class="diff-card">
+              <div class="diff-header">
+                <i class="fa-solid fa-file-shield diff-icon"></i>
+                <h4>Append-Only Audit Governance</h4>
+              </div>
+              <p>Every single listing, reservation, handover, and delivery is logged into an immutable audit trail with export to CSV for regulatory compliance.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS: 4 SIMPLE STEPS -->
+      <section class="info-section bg-surface" id="how-it-works">
+        <div class="section-container">
+          <div class="section-header text-center">
+            <span class="sub-pill">Redistribution Lifecycle</span>
+            <h2 class="section-title">How It Works in 4 Simple Steps</h2>
+            <p class="section-subtitle">A seamless four-stage pipeline that takes surplus from commercial kitchens to shelter dining tables.</p>
+          </div>
+
+          <div class="steps-flow-grid">
+            <div class="step-card">
+              <div class="step-num">01</div>
+              <div class="step-icon-box"><i class="fa-solid fa-clipboard-list"></i></div>
+              <h3>1. Donor Lists Food</h3>
+              <p>Restaurants, caterers, or bakeries list surplus portions with safety certifications and consumption windows in under 2 minutes.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">02</div>
+              <div class="step-icon-box"><i class="fa-solid fa-location-crosshairs"></i></div>
+              <h3>2. NGO Discovers & Claims</h3>
+              <p>Verified shelters with approved registration certificates discover listings on proximity maps and reserve food with 1 click.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">03</div>
+              <div class="step-icon-box"><i class="fa-solid fa-truck-fast"></i></div>
+              <h3>3. Volunteer Pickup</h3>
+              <p>Eco-couriers accept the dispatch mission, navigate to the kitchen, and perform the 6-digit OTP verification handshake.</p>
+            </div>
+
+            <div class="step-card">
+              <div class="step-num">04</div>
+              <div class="step-icon-box"><i class="fa-solid fa-heart-circle-check"></i></div>
+              <h3>4. Community Fed</h3>
+              <p>The shelter confirms receipt with the delivery PIN, meals are safely distributed, and sustainability analytics update in real time.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BENTO ROLE ECOSYSTEM -->
+      <section class="info-section" id="roles">
+        <div class="section-container">
+          <div class="section-header text-center">
+            <span class="sub-pill">Tailored Interfaces</span>
+            <h2 class="section-title">Built For Every Stakeholder</h2>
+            <p class="section-subtitle">Dedicated, role-optimized dashboards for donors, charities, and volunteer couriers.</p>
+          </div>
+
+          <div class="bento-roles-grid">
+            <!-- Donor Role Card -->
+            <div class="role-bento-card bento-donor">
+              <div class="bento-badge">For Food Donors</div>
+              <div class="bento-icon"><i class="fa-solid fa-store"></i></div>
+              <h3>Commercial Kitchens & Caterers</h3>
+              <p>List food in seconds, attach hygiene checklists, monitor live pickup status, and download tax-deductible waste diversion certificates.</p>
+              <ul class="role-feature-list">
+                <li><i class="fa-solid fa-check text-accent"></i> Instant listing with AI auto-fill assistant</li>
+                <li><i class="fa-solid fa-check text-accent"></i> 6-digit pickup OTP to prevent unauthorized collection</li>
+                <li><i class="fa-solid fa-check text-accent"></i> Real-time status: Available &bull; Claimed &bull; Delivered</li>
+              </ul>
+              <button class="btn-role-cta" onclick="openRegisterModal('DONOR')">Register as Food Donor</button>
+            </div>
+
+            <!-- NGO Role Card -->
+            <div class="role-bento-card bento-ngo">
+              <div class="bento-badge">For NGOs & Shelters</div>
+              <div class="bento-icon"><i class="fa-solid fa-building-ngo"></i></div>
+              <h3>Charity Pantries & Shelters</h3>
+              <p>Discover available fresh meals on an interactive map, filter by dietary requirements (Veg, Halal, Gluten-Free), and coordinate delivery.</p>
+              <ul class="role-feature-list">
+                <li><i class="fa-solid fa-check text-accent"></i> Upload official NGO registration certificate</li>
+                <li><i class="fa-solid fa-check text-accent"></i> Proximity discovery with customizable radius filter</li>
+                <li><i class="fa-solid fa-check text-accent"></i> Live courier GPS tracking simulator</li>
+              </ul>
+              <button class="btn-role-cta" onclick="openRegisterModal('NGO')">Register as NGO / Shelter</button>
+            </div>
+
+            <!-- Volunteer Role Card -->
+            <div class="role-bento-card bento-volunteer">
+              <div class="bento-badge">For Volunteer Couriers</div>
+              <div class="bento-icon"><i class="fa-solid fa-bicycle"></i></div>
+              <h3>Community Couriers & Riders</h3>
+              <p>Bridge the physical gap. Accept nearby transport missions, toggle active availability, and navigate with integrated routing shortcuts.</p>
+              <ul class="role-feature-list">
+                <li><i class="fa-solid fa-check text-accent"></i> Turn-by-turn route overview from donor to shelter</li>
+                <li><i class="fa-solid fa-check text-accent"></i> Secure 6-digit PIN verification keypad</li>
+                <li><i class="fa-solid fa-check text-accent"></i> Trip history, volunteer rank badges, and carbon offset points</li>
+              </ul>
+              <button class="btn-role-cta" onclick="openRegisterModal('VOLUNTEER')">Register as Volunteer</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS & COMMUNITY VOICES -->
+      <section class="info-section bg-surface" id="testimonials">
+        <div class="section-container">
+          <div class="section-header text-center">
+            <span class="sub-pill">Community Trust</span>
+            <h2 class="section-title">Stories From The Ground</h2>
+            <p class="section-subtitle">Real feedback from restaurant owners, shelter directors, and bicycle couriers.</p>
+          </div>
+
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <div class="quote-stars">★★★★★</div>
+              <p class="quote-text">"Before SurplusSync, throwing away pristine banquet food was heartbreaking. Now in 2 minutes I list our surplus, and an NGO courier collects it while it is still piping hot."</p>
+              <div class="quote-author">
+                <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150" alt="Chef Antonio">
+                <div>
+                  <strong>Chef Antonio Rossi</strong>
+                  <span>Head Chef, Bistro Della Spiga</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-stars">★★★★★</div>
+              <p class="quote-text">"Our shelter feeds 120 residents daily on a tight non-profit budget. The certificate verification and temperature checklist give our donors complete confidence."</p>
+              <div class="quote-author">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" alt="Maria Santos">
+                <div>
+                  <strong>Maria Santos</strong>
+                  <span>Director, Hope Community Kitchen</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-card">
+              <div class="quote-stars">★★★★★</div>
+              <p class="quote-text">"The 6-digit OTP handshake makes courier logistics foolproof. I know exactly where to pick up, the chef gives me the PIN, and the shelter verifies delivery in seconds."</p>
+              <div class="quote-author">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="Alex Chen">
+                <div>
+                  <strong>Alex Chen</strong>
+                  <span>EcoRiders Volunteer Courier</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LANDING FOOTER -->
+      <footer class="app-footer">
+        <div class="section-container footer-container">
+          <div class="footer-col">
+            <div class="brand-link mb-3">
+              <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+              <span class="brand-title">Surplus<span class="text-accent">Sync</span></span>
+            </div>
+            <p class="footer-desc">An intelligent, open-source food redistribution architecture built on the LAMP stack for zero-waste communities.</p>
+            <div class="lamp-tag"><i class="fa-solid fa-server"></i> Linux &bull; Apache &bull; MySQL &bull; PHP (LAMP VM Ready)</div>
+          </div>
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <a href="#about" onclick="scrollToSection('about')">About & Goals</a>
+            <a href="#how-it-works" onclick="scrollToSection('how-it-works')">How It Works</a>
+            <a href="#differentiators" onclick="scrollToSection('differentiators')">Differentiators</a>
+            <a href="#roles" onclick="scrollToSection('roles')">Stakeholder Roles</a>
+          </div>
+          <div class="footer-col">
+            <h4>Access Portals</h4>
+            <a href="#" onclick="openLoginModal(); return false;">Sign In</a>
+            <a href="#" onclick="openRegisterModal('DONOR'); return false;">Donor Registration</a>
+            <a href="#" onclick="openRegisterModal('NGO'); return false;">Shelter / NGO Registration (Certificate Required)</a>
+            <a href="#" onclick="openRegisterModal('VOLUNTEER'); return false;">Volunteer Courier Registration</a>
+          </div>
+          <div class="footer-col">
+            <h4>Redistribution Standards</h4>
+            <p class="footer-desc">Enforcing mandatory temperature controls, 60 km food safety horizons, and verified chain of custody.</p>
+          </div>
+        </div>
+        <div class="footer-bottom text-center">
+          <p>&copy; 2026 SurplusSync. Developed for Final Year Web Engineering Project Evaluation.</p>
+        </div>
+      </footer>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 2: DONOR PORTAL (Matches DonorHome.tsx & AddFood.tsx)               -->
+    <!-- ======================================================================= -->
+    <section id="view-donor" class="page-view">
+      <div class="portal-container">
+        
+        <!-- Donor Portal Header -->
+        <div class="portal-header">
+          <div>
+            <div class="portal-greeting" id="donor-greeting">Good day, Chef Antonio!</div>
+            <h1 class="portal-title">Donor Food Management Hub</h1>
+            <p class="portal-subtitle"><i class="fa-solid fa-store"></i> <span id="donor-org-label">Bistro Della Spiga</span> &bull; Manage surplus food batches, monitor reservations, and verify courier handovers.</p>
+          </div>
+          <div class="portal-header-actions">
+            <button class="btn-primary" onclick="openAddFoodModal()">
+              <i class="fa-solid fa-plus-circle"></i>
+              <span>List New Surplus Food</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Donor Summary Stat Cards -->
+        <div class="portal-stats-row">
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-emerald-light text-accent"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="donor-stat-available">0</span>
+              <span class="pstat-label">Available for Shelters</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-amber-light text-warning"><i class="fa-solid fa-hand-holding-heart"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="donor-stat-claimed">0</span>
+              <span class="pstat-label">Claimed &bull; Awaiting Pickup</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-blue-light text-blue"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="donor-stat-delivered">0</span>
+              <span class="pstat-label">Delivered & Rescued</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-red-light text-danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="donor-stat-urgent">0</span>
+              <span class="pstat-label">Urgent (&lt;3h Expiry)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Donor Listings Filter Tabs -->
+        <div class="portal-filter-tabs">
+          <button class="ptab-btn active" data-donor-filter="ALL" onclick="filterDonorListings('ALL')">All Listings</button>
+          <button class="ptab-btn" data-donor-filter="AVAILABLE" onclick="filterDonorListings('AVAILABLE')">🟢 Available</button>
+          <button class="ptab-btn" data-donor-filter="CLAIMED" onclick="filterDonorListings('CLAIMED')">🟡 Claimed by NGO</button>
+          <button class="ptab-btn" data-donor-filter="DELIVERED" onclick="filterDonorListings('DELIVERED')">🔵 Completed / Delivered</button>
+        </div>
+
+        <!-- Donor Food Listings Grid -->
+        <div class="donor-listings-grid" id="donor-listings-grid">
+          <!-- Dynamically populated cards -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 3: NGO / SHELTER PORTAL (Matches NGODashboard.tsx & Map)           -->
+    <!-- ======================================================================= -->
+    <section id="view-ngo" class="page-view">
+      <div class="portal-container">
+        
+        <!-- NGO Header -->
+        <div class="portal-header">
+          <div>
+            <div class="portal-greeting" id="ngo-greeting">Welcome back, Maria!</div>
+            <h1 class="portal-title">Shelter Food Discovery & Claim Hub</h1>
+            <p class="portal-subtitle"><i class="fa-solid fa-building-ngo"></i> <span id="ngo-org-label">Hope Community Kitchen</span> &bull; Discover nearby surplus food, claim meals, and monitor live courier transit.</p>
+          </div>
+          <div class="ngo-view-switch-pills">
+            <button class="view-switch-btn active" id="ngo-tab-marketplace" onclick="switchNgoSubView('marketplace')">
+              <i class="fa-solid fa-list-ul"></i> Food Marketplace
+            </button>
+            <button class="view-switch-btn" id="ngo-tab-map" onclick="switchNgoSubView('map')">
+              <i class="fa-solid fa-map-location-dot"></i> Discovery Map
+            </button>
+            <button class="view-switch-btn" id="ngo-tab-claims" onclick="switchNgoSubView('claims')">
+              <i class="fa-solid fa-hand-holding-heart"></i> My Reserved Claims (<span id="ngo-claims-badge">0</span>)
+            </button>
+          </div>
+        </div>
+
+        <!-- NGO Verification Status Alert Banner -->
+        <div class="ngo-verification-banner" id="ngo-verification-banner" style="display: none;">
+          <div class="nvb-icon"><i class="fa-solid fa-certificate"></i></div>
+          <div class="nvb-text">
+            <strong>Official NGO Registration Certificate Verified</strong>
+            <p>Your organization is fully verified by the municipal food board to claim surplus donations.</p>
+          </div>
+          <span class="badge-verified"><i class="fa-solid fa-check-circle"></i> Verified Charity</span>
+        </div>
+
+        <!-- NGO Quick Impact Metrics -->
+        <div class="portal-stats-row">
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-emerald-light text-accent"><i class="fa-solid fa-utensils"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="ngo-stat-rescued-meals">1,420</span>
+              <span class="pstat-label">Meals Rescued by Shelter</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-amber-light text-warning"><i class="fa-solid fa-truck-fast"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="ngo-stat-in-transit">0</span>
+              <span class="pstat-label">Active Couriers En Route</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-teal-light text-teal"><i class="fa-solid fa-leaf"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="ngo-stat-co2">639 kg</span>
+              <span class="pstat-label">CO₂ Emissions Prevented</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBVIEW A: FOOD MARKETPLACE FEED -->
+        <div class="ngo-subview active" id="ngo-subview-marketplace">
+          <!-- Filter and Search Bar -->
+          <div class="ngo-filter-bar">
+            <div class="search-box-wrap">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="ngo-search-input" placeholder="Search dishes, bakeries, hot rice, caterers..." oninput="handleNgoSearch(this.value)">
+            </div>
+            <div class="ngo-category-chips">
+              <button class="ngo-chip active" data-cat="ALL" onclick="filterNgoCategory('ALL')">All Foods</button>
+              <button class="ngo-chip" data-cat="PREPARED_MEAL" onclick="filterNgoCategory('PREPARED_MEAL')">🍱 Cooked Meals</button>
+              <button class="ngo-chip" data-cat="BAKED_GOODS" onclick="filterNgoCategory('BAKED_GOODS')">🥖 Bakery & Bread</button>
+              <button class="ngo-chip" data-cat="PRODUCE" onclick="filterNgoCategory('PRODUCE')">🥦 Fresh Produce</button>
+              <button class="ngo-chip" data-cat="DAIRY" onclick="filterNgoCategory('DAIRY')">🥛 Dairy</button>
+              <button class="ngo-chip" data-cat="PACKAGED" onclick="filterNgoCategory('PACKAGED')">📦 Packaged</button>
+              <button class="ngo-chip chip-urgent" id="ngo-chip-urgent" onclick="toggleNgoUrgency()">⚡ Urgent (&lt;3h Left)</button>
+            </div>
+          </div>
+
+          <!-- Available Food Feed Grid -->
+          <div class="ngo-food-grid" id="ngo-marketplace-grid">
+            <!-- Dynamically populated cards with "Claim Food" action -->
+          </div>
+        </div>
+
+        <!-- SUBVIEW B: INTERACTIVE LEAFLET DISCOVERY MAP -->
+        <div class="ngo-subview" id="ngo-subview-map">
+          <div class="leaflet-map-wrapper">
+            <div class="map-controls-floating">
+              <div class="map-ctrl-header">
+                <label for="leaflet-radius-slider">
+                  <i class="fa-solid fa-radar text-accent"></i> Proximity Filter: <strong id="leaflet-radius-label">30 km</strong>
+                </label>
+                <span class="geofence-pill-badge" title="Maximum safe courier transit limit">Max Limit: 60 km</span>
+              </div>
+              <input type="range" id="leaflet-radius-slider" min="3" max="60" value="30" oninput="handleLeafletRadiusChange(this.value)">
+              <div class="map-ctrl-legend">
+                <span><span class="legend-dot dot-green"></span> Discovery Circle</span>
+                <span><span class="legend-dot dot-red"></span> 60km Food Safety Limit</span>
+              </div>
+            </div>
+            <div id="ngo-leaflet-map-container" class="map-element"></div>
+          </div>
+        </div>
+
+        <!-- SUBVIEW C: MY ACTIVE CLAIMS -->
+        <div class="ngo-subview" id="ngo-subview-claims">
+          <div class="claims-list-wrapper" id="ngo-claims-list-wrapper">
+            <!-- Shows reserved items and the NGO's 6-digit delivery OTP to confirm arrival -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 4: VOLUNTEER COURIER PORTAL (Matches VolunteerDashboard.tsx)        -->
+    <!-- ======================================================================= -->
+    <section id="view-volunteer" class="page-view">
+      <div class="portal-container">
+        
+        <!-- Volunteer Header -->
+        <div class="portal-header">
+          <div>
+            <div class="portal-greeting" id="vol-greeting">Ready for missions, Alex!</div>
+            <h1 class="portal-title">Volunteer Courier Dispatch Hub</h1>
+            <p class="portal-subtitle"><i class="fa-solid fa-bicycle"></i> <span id="vol-org-label">EcoRiders Logistics</span> &bull; Coordinate surplus pickup, navigate to donors, and verify delivery handshakes.</p>
+          </div>
+          <div class="volunteer-status-toggle-wrap">
+            <span class="vol-avail-text" id="vol-avail-text">Status: <strong>Available for Missions</strong></span>
+            <button class="btn-toggle-avail active" id="btn-vol-toggle" onclick="toggleVolunteerAvailability()">
+              <i class="fa-solid fa-power-off"></i> Online
+            </button>
+          </div>
+        </div>
+
+        <!-- Volunteer Stat Cards -->
+        <div class="portal-stats-row">
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-emerald-light text-accent"><i class="fa-solid fa-flag-checkered"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="vol-stat-completed">24</span>
+              <span class="pstat-label">Trips Completed</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-amber-light text-warning"><i class="fa-solid fa-motorcycle"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value" id="vol-stat-active-missions">0</span>
+              <span class="pstat-label">Active Assigned Missions</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-blue-light text-blue"><i class="fa-solid fa-star"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value">4.9 / 5.0</span>
+              <span class="pstat-label">Courier Safety Rating</span>
+            </div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="pstat-icon bg-purple-light text-purple"><i class="fa-solid fa-award"></i></div>
+            <div class="pstat-content">
+              <span class="pstat-value">Gold Courier</span>
+              <span class="pstat-label">Community Honor Badge</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volunteer Mission Tabs & Active Missions List -->
+        <div class="volunteer-missions-container">
+          <div class="vol-mission-tabs">
+            <button class="vol-subtab-btn active" id="vol-tab-available" onclick="switchVolunteerSubTab('available')">
+              <i class="fa-solid fa-clipboard-list"></i> Available Missions in Your Area (<span id="vol-available-badge">0</span>)
+            </button>
+            <button class="vol-subtab-btn" id="vol-tab-active" onclick="switchVolunteerSubTab('active')">
+              <i class="fa-solid fa-route"></i> My Active Missions (<span id="vol-active-badge">0</span>)
+            </button>
+          </div>
+          <div class="missions-cards-grid" id="vol-missions-grid">
+            <!-- Dynamically populated mission cards with route & OTP inputs -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- VIEW 5: ADMIN & AUDIT PORTAL (Matches AdminDashboard.tsx & Impact.tsx)  -->
+    <!-- ======================================================================= -->
+    <section id="view-admin" class="page-view">
+      <div class="portal-container">
+        
+        <!-- Admin Header -->
+        <div class="portal-header">
+          <div>
+            <div class="portal-greeting">System Administration</div>
+            <h1 class="portal-title">Platform Governance & Audit Trail</h1>
+            <p class="portal-subtitle"><i class="fa-solid fa-shield-halved"></i> Food Safety Board &bull; Real-time oversight, verification logs, and compliance reporting.</p>
+          </div>
+          <div class="portal-header-actions">
+            <button class="btn-admin-export" onclick="exportAuditLogCsv()">
+              <i class="fa-solid fa-file-csv"></i> Export Audit CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Admin Navigation Tabs -->
+        <div class="portal-filter-tabs">
+          <button class="ptab-btn active" id="atab-queue" onclick="switchAdminTab('queue')">
+            <i class="fa-solid fa-certificate"></i> Pending NGO Certificate Queue (<span id="admin-pending-count">1</span>)
+          </button>
+          <button class="ptab-btn" id="atab-metrics" onclick="switchAdminTab('metrics')">
+            <i class="fa-solid fa-chart-pie"></i> Live Impact & Leaderboard
+          </button>
+          <button class="ptab-btn" id="atab-tickets" onclick="switchAdminTab('tickets')">
+            <i class="fa-solid fa-headset"></i> Support & Grievance Tickets
+          </button>
+          <button class="ptab-btn" id="atab-audit" onclick="switchAdminTab('audit')">
+            <i class="fa-solid fa-list-check"></i> System Audit Trail
+          </button>
+        </div>
+
+        <!-- ADMIN TAB 1: PENDING NGO CERTIFICATE VERIFICATION QUEUE -->
+        <div class="admin-tab-content active" id="admin-content-queue">
+          <div class="admin-panel-card mb-4">
+            <div class="panel-header">
+              <div>
+                <h3>NGO Verification & Certificate Approval Queue</h3>
+                <p style="font-size:0.84rem; color:var(--text-muted); margin-top:2px;">
+                  Review uploaded government registration documents (80G, 12A, 501(c)(3)) to authorize shelters for surplus claiming.
+                </p>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="audit-data-table">
+                <thead>
+                  <tr>
+                    <th>Shelter / NGO Name</th>
+                    <th>Representative</th>
+                    <th>Contact Info</th>
+                    <th>Registration Certificate</th>
+                    <th>Registration Date</th>
+                    <th>Verification Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-pending-ngo-tbody">
+                  <!-- Dynamically populated pending NGOs -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB 2: LIVE IMPACT & LEADERBOARD -->
+        <div class="admin-tab-content" id="admin-content-metrics">
+          <div class="portal-stats-row">
+            <div class="portal-stat-card">
+              <div class="pstat-icon bg-emerald-light text-accent"><i class="fa-solid fa-utensils"></i></div>
+              <div class="pstat-content">
+                <span class="pstat-value" id="admin-total-meals">14,250</span>
+                <span class="pstat-label">Total Meals Redistributed</span>
+              </div>
+            </div>
+            <div class="portal-stat-card">
+              <div class="pstat-icon bg-blue-light text-blue"><i class="fa-solid fa-weight-hanging"></i></div>
+              <div class="pstat-content">
+                <span class="pstat-value" id="admin-total-kg">6,412 kg</span>
+                <span class="pstat-label">Food Rescued from Landfill</span>
+              </div>
+            </div>
+            <div class="portal-stat-card">
+              <div class="pstat-icon bg-teal-light text-teal"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+              <div class="pstat-content">
+                <span class="pstat-value" id="admin-total-co2">16,030 kg</span>
+                <span class="pstat-label">CO₂e Emissions Prevented</span>
+              </div>
+            </div>
+            <div class="portal-stat-card">
+              <div class="pstat-icon bg-purple-light text-purple"><i class="fa-solid fa-tree"></i></div>
+              <div class="pstat-content">
+                <span class="pstat-value" id="admin-total-trees">769</span>
+                <span class="pstat-label">Equivalent Trees Planted</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-split-grid">
+            <div class="admin-panel-card">
+              <div class="panel-header">
+                <h3>Monthly Food Rescue Trend</h3>
+                <span class="panel-badge">Meals per Month</span>
+              </div>
+              <div class="svg-chart-box" id="admin-chart-box">
+                <!-- Rendered via app.js -->
+              </div>
+            </div>
+
+            <div class="admin-panel-card">
+              <div class="panel-header">
+                <h3>Top Contributing Donors</h3>
+                <span class="panel-badge">Leaderboard</span>
+              </div>
+              <div class="leaderboard-items" id="admin-leaderboard-items">
+                <!-- Rendered via app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB 3: SUPPORT TICKETS & GRIEVANCES -->
+        <div class="admin-tab-content" id="admin-content-tickets">
+          <div class="admin-panel-card">
+            <div class="panel-header">
+              <h3>Community Support & Logistics Tickets</h3>
+              <span class="panel-badge">Customer Service</span>
+            </div>
+            <div class="table-responsive">
+              <table class="audit-data-table">
+                <thead>
+                  <tr>
+                    <th>Ticket ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-tickets-tbody">
+                  <!-- Dynamically populated tickets -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADMIN TAB 4: AUDIT LOG -->
+        <div class="admin-tab-content" id="admin-content-audit">
+          <div class="admin-audit-section">
+            <div class="audit-section-header">
+              <h3><i class="fa-solid fa-list-check text-accent"></i> Immutable System Event Log</h3>
+              <div class="audit-search-wrap">
+                <input type="text" id="admin-audit-search" placeholder="Filter by actor, action, or ID..." oninput="handleAuditSearch(this.value)">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="audit-data-table">
+                <thead>
+                  <tr>
+                    <th>Event ID</th>
+                    <th>Timestamp</th>
+                    <th>Actor</th>
+                    <th>Role</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Details</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-audit-tbody">
+                  <!-- Dynamically populated audit entries -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: SIGN IN / LOGIN                                                  -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="modal-login" onclick="closeAuthModal(event, 'modal-login')">
+    <div class="auth-dialog-card">
+      <button class="dialog-close-btn" onclick="closeAuthModal(null, 'modal-login')">&times;</button>
+      
+      <div class="auth-dialog-header">
+        <div class="auth-logo-badge"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
+        <h2>Sign In to SurplusSync</h2>
+        <p>Access your role portal to manage food, claims, or deliveries</p>
+      </div>
+
+      <!-- Quick Role Preset Switcher for Professor / Viva Defense -->
+      <div class="demo-login-quickbar">
+        <span class="demo-quick-label">⚡ 1-Click Viva Demo Logins:</span>
+        <div class="demo-btn-group">
+          <button type="button" class="btn-demo-tag tag-donor" onclick="quickFillLogin('donor')">👨‍🍳 Chef (Donor)</button>
+          <button type="button" class="btn-demo-tag tag-ngo" onclick="quickFillLogin('ngo')">🏛️ Maria (NGO)</button>
+          <button type="button" class="btn-demo-tag tag-vol" onclick="quickFillLogin('volunteer')">🚴 Alex (Courier)</button>
+          <button type="button" class="btn-demo-tag tag-admin" onclick="quickFillLogin('admin')">🛡️ Admin</button>
+        </div>
+      </div>
+
+      <form id="form-login" onsubmit="handleLoginSubmit(event)">
+        <div class="form-field">
+          <label for="login-email">Email Address</label>
+          <input type="email" id="login-email" required placeholder="e.g., donor@foodshare.org">
+        </div>
+        <div class="form-field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-auth-submit" id="btn-login-submit">
+          <span>Sign In to Dashboard</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="auth-dialog-footer">
+        <span>Don't have an account yet?</span>
+        <a href="#" onclick="switchAuthModal('modal-login', 'modal-register'); return false;">Create an account</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: SIGN UP / REGISTRATION (FOR ALL 3 ROLES + CERTIFICATE UPLOAD)   -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="modal-register" onclick="closeAuthModal(event, 'modal-register')">
+    <div class="auth-dialog-card register-dialog-card">
+      <button class="dialog-close-btn" onclick="closeAuthModal(null, 'modal-register')">&times;</button>
+      
+      <div class="auth-dialog-header">
+        <div class="auth-logo-badge bg-emerald-light text-accent"><i class="fa-solid fa-user-plus"></i></div>
+        <h2>Create SurplusSync Account</h2>
+        <p>Select your operational role and join our verified food rescue network</p>
+      </div>
+
+      <!-- Step 1: Select Role -->
+      <div class="role-selector-pills">
+        <label class="role-radio-pill active" id="pill-role-donor">
+          <input type="radio" name="reg-role" value="DONOR" checked onchange="handleRoleSelection('DONOR')">
+          <div class="radio-pill-content">
+            <i class="fa-solid fa-store"></i>
+            <strong>Food Donor</strong>
+            <span>Restaurant / Caterer</span>
+          </div>
+        </label>
+
+        <label class="role-radio-pill" id="pill-role-ngo">
+          <input type="radio" name="reg-role" value="NGO" onchange="handleRoleSelection('NGO')">
+          <div class="radio-pill-content">
+            <i class="fa-solid fa-building-ngo"></i>
+            <strong>NGO / Shelter</strong>
+            <span>Charity Food Bank</span>
+          </div>
+        </label>
+
+        <label class="role-radio-pill" id="pill-role-vol">
+          <input type="radio" name="reg-role" value="VOLUNTEER" onchange="handleRoleSelection('VOLUNTEER')">
+          <div class="radio-pill-content">
+            <i class="fa-solid fa-bicycle"></i>
+            <strong>Volunteer</strong>
+            <span>Delivery Courier</span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Step 2: Form Details -->
+      <form id="form-register" onsubmit="handleRegisterSubmit(event)">
+        <div class="form-row-2col">
+          <div class="form-field">
+            <label for="reg-name">Contact / Representative Name *</label>
+            <input type="text" id="reg-name" required placeholder="e.g., Chef Antonio Rossi">
+          </div>
+          <div class="form-field">
+            <label for="reg-email">Official Email Address *</label>
+            <input type="email" id="reg-email" required placeholder="e.g., antonio@bistro.com">
+          </div>
+        </div>
+
+        <div class="form-row-2col">
+          <div class="form-field">
+            <label for="reg-password">Password *</label>
+            <input type="password" id="reg-password" required minlength="6" placeholder="At least 6 characters">
+          </div>
+          <div class="form-field">
+            <label for="reg-phone">Phone Number *</label>
+            <input type="tel" id="reg-phone" required placeholder="+1 (555) 234-8901">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="reg-org" id="reg-org-label">Organization / Business Name *</label>
+          <input type="text" id="reg-org" required placeholder="e.g., Bistro Della Spiga">
+        </div>
+
+        <div class="form-row-2col">
+          <div class="form-field">
+            <label for="reg-approx">District / Neighborhood *</label>
+            <input type="text" id="reg-approx" required placeholder="e.g., Downtown Arts District">
+          </div>
+          <div class="form-field">
+            <label for="reg-address">Full Physical Address *</label>
+            <input type="text" id="reg-address" required placeholder="e.g., 412 Renaissance Ave, Suite 100">
+          </div>
+        </div>
+
+        <!-- SPECIAL NGO CERTIFICATE UPLOAD SECTION (Mandatory for NGOs) -->
+        <div class="ngo-certificate-upload-section" id="ngo-cert-section" style="display: none;">
+          <div class="cert-box-header">
+            <i class="fa-solid fa-file-contract text-accent"></i>
+            <div>
+              <strong>Official NGO Registration Certificate (PDF or Image) *</strong>
+              <p>Government 80G, 12A, or Non-Profit Registration document proving charity status.</p>
+            </div>
+          </div>
+          <div class="cert-upload-controls">
+            <label class="btn-cert-upload">
+              <i class="fa-solid fa-upload"></i> Browse Certificate File
+              <input type="file" id="reg-certificate-file" accept="image/*,.pdf" onchange="handleCertFileSelect(event)" style="display:none;">
+            </label>
+            <span class="cert-filename-badge" id="cert-filename-badge">No file chosen (Sample verified certificate will be attached)</span>
+          </div>
+          <input type="hidden" id="reg-certificate-url" value="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600">
+        </div>
+
+        <button type="submit" class="btn-auth-submit" id="btn-register-submit">
+          <span id="btn-reg-text">Register as Food Donor & Launch Portal</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="auth-dialog-footer">
+        <span>Already have an account?</span>
+        <a href="#" onclick="switchAuthModal('modal-register', 'modal-login'); return false;">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 3: LIST FOOD DONATION (With AI NLP Auto-Fill & Safety Attestation)   -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="modal-add-food" onclick="closeAuthModal(event, 'modal-add-food')">
+    <div class="add-food-dialog-card">
+      <button class="dialog-close-btn" onclick="closeAuthModal(null, 'modal-add-food')">&times;</button>
+      
+      <div class="auth-dialog-header">
+        <div class="auth-logo-badge bg-emerald-light text-accent"><i class="fa-solid fa-plus-circle"></i></div>
+        <h2>List Surplus Food Batch</h2>
+        <p>Make excess food immediately claimable by verified community shelters</p>
+      </div>
+
+      <!-- AI Smart Assistant Prompt Banner -->
+      <div class="ai-smart-card">
+        <div class="ai-smart-header">
+          <span><i class="fa-solid fa-sparkles text-warning"></i> <strong>AI Smart Auto-Fill (Natural Language)</strong></span>
+          <span class="ai-tag-chip">Smart Extraction</span>
+        </div>
+        <p class="ai-smart-desc">Paste messy chef notes or banquet surplus descriptions to auto-populate the form:</p>
+        <div class="ai-smart-input-row">
+          <textarea id="ai-nlp-input" rows="2" placeholder="e.g. We have 45 servings of hot vegetable biryani and chickpea curry prepared at 1 PM in foil trays with lids. Halal and veg. Available for 3 hours."></textarea>
+          <button type="button" class="btn-ai-extract" onclick="runAiNlpExtraction()">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Fill
+          </button>
+        </div>
+        <div class="ai-samples-row">
+          <span>Try sample:</span>
+          <button type="button" class="sample-btn" onclick="loadNlpSample(1)">Hot Banquet Biryani</button>
+          <button type="button" class="sample-btn" onclick="loadNlpSample(2)">Bakery Pastries</button>
+          <button type="button" class="sample-btn" onclick="loadNlpSample(3)">Organic Farm Produce</button>
+        </div>
+      </div>
+
+      <form id="form-add-food" onsubmit="handleAddFoodSubmit(event)">
+        <div class="form-field">
+          <label for="food-title">Food Title / Description *</label>
+          <input type="text" id="food-title" required placeholder="e.g., Artisan Sourdough Loaves & Olive Focaccia">
+        </div>
+
+        <div class="form-row-2col">
+          <div class="form-field">
+            <label for="food-category">Food Category *</label>
+            <select id="food-category" required>
+              <option value="PREPARED_MEAL">Cooked / Prepared Meal</option>
+              <option value="BAKED_GOODS">Baked Goods & Bread</option>
+              <option value="PRODUCE">Fresh Produce & Greens</option>
+              <option value="DAIRY">Dairy & Chilled</option>
+              <option value="PACKAGED">Packaged / Canned</option>
+              <option value="OTHER">Other Surplus</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Quantity & Unit *</label>
+            <div class="inline-qty-row">
+              <input type="number" id="food-qty" min="1" value="25" required style="width: 50%;">
+              <select id="food-unit" style="width: 50%;">
+                <option value="servings">servings</option>
+                <option value="portions">portions</option>
+                <option value="loaves">loaves</option>
+                <option value="kg">kg</option>
+                <option value="boxes">boxes</option>
+                <option value="liters">liters</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row-2col">
+          <div class="form-field">
+            <label for="food-packaging">Packaging Type *</label>
+            <input type="text" id="food-packaging" value="Heavy-Duty Foil Trays with Thermal Seal" placeholder="e.g., Foil Trays, Kraft Boxes">
+          </div>
+          <div class="form-field">
+            <label for="food-temp">Temperature Condition *</label>
+            <select id="food-temp">
+              <option value="HOT">Hot (Kept above 60°C)</option>
+              <option value="CHILLED">Chilled (Refrigerated 4°C)</option>
+              <option value="ROOM_TEMP" selected>Room Temperature</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="food-expiry">Available Until (Expiry Window) *</label>
+          <input type="datetime-local" id="food-expiry" required>
+        </div>
+
+        <div class="form-field">
+          <label>Dietary Classifications</label>
+          <div class="dietary-checkboxes">
+            <label class="check-badge"><input type="checkbox" name="food-diet" value="VEGETARIAN" checked> Vegetarian</label>
+            <label class="check-badge"><input type="checkbox" name="food-diet" value="VEGAN"> Vegan</label>
+            <label class="check-badge"><input type="checkbox" name="food-diet" value="HALAL"> Halal</label>
+            <label class="check-badge"><input type="checkbox" name="food-diet" value="GLUTEN_FREE"> Gluten-Free</label>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="food-image">Food Photography (Image URL or Upload)</label>
+          <div class="photo-upload-row">
+            <input type="url" id="food-image" placeholder="Paste image link or upload photo below" oninput="previewFoodImage(this.value)">
+            <label class="btn-upload-file">
+              <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload File
+              <input type="file" id="food-file-input" accept="image/*" onchange="handleImageFileUpload(event)" style="display:none;">
+            </label>
+          </div>
+          <div class="img-preview-container">
+            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600" alt="Preview" id="add-food-preview-img">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="food-notes">Special Instructions & Allergen Notes</label>
+          <textarea id="food-notes" rows="2" placeholder="e.g. Please bring insulated transport bag. Contains dairy. Kitchen entrance on back alley."></textarea>
+        </div>
+
+        <!-- Mandatory Food Safety Attestation Checklist -->
+        <div class="safety-attestation-card">
+          <label class="safety-check-row">
+            <input type="checkbox" id="safety-attest-cb" required checked>
+            <span><strong>Food Safety Attestation:</strong> I certify that this food was prepared under certified hygiene conditions, kept at safe thermal conditions, and packed in food-grade sanitary packaging.</span>
+          </label>
+        </div>
+
+        <div class="modal-btn-row">
+          <button type="button" class="btn-text" onclick="closeAuthModal(null, 'modal-add-food')">Cancel</button>
+          <button type="submit" class="btn-primary" id="btn-publish-donation">
+            <i class="fa-solid fa-paper-plane"></i> Publish Surplus Food Pin
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 4: 6-DIGIT OTP VERIFICATION HANDSHAKE (ReTray Security Handshake)   -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="modal-otp" onclick="closeAuthModal(event, 'modal-otp')">
+    <div class="otp-dialog-card">
+      <button class="dialog-close-btn" onclick="closeAuthModal(null, 'modal-otp')">&times;</button>
+      
+      <div class="otp-dialog-header">
+        <div class="otp-shield-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3 id="otp-title">Enter Verification PIN</h3>
+        <p id="otp-subtitle">Cryptographic custody transfer verification</p>
+      </div>
+
+      <div class="otp-dialog-body">
+        <div class="otp-instructions" id="otp-instructions">
+          Ask the Donor / Restaurant for the 6-digit Pickup PIN shown on their screen.
+        </div>
+
+        <div class="otp-keypad-wrap">
+          <input type="text" maxlength="6" id="otp-code-input" class="otp-code-input" placeholder="••••••" autocomplete="off">
+        </div>
+
+        <div class="modal-btn-row justify-center">
+          <button type="button" class="btn-text" onclick="closeAuthModal(null, 'modal-otp')">Cancel</button>
+          <button type="button" class="btn-primary" onclick="submitOtpVerification()">
+            <i class="fa-solid fa-circle-check"></i> Verify & Confirm Handshake
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 6: CERTIFICATE VIEWER MODAL (For Admin to Inspect NGO Document)    -->
+  <!-- ========================================================================= -->
+  <div class="modal-backdrop" id="modal-view-certificate" onclick="closeAuthModal(event, 'modal-view-certificate')">
+    <div class="auth-dialog-card" style="max-width: 650px;">
+      <button class="dialog-close-btn" onclick="closeAuthModal(null, 'modal-view-certificate')">&times;</button>
+      <div class="auth-dialog-header">
+        <div class="auth-logo-badge bg-emerald-light text-accent"><i class="fa-solid fa-stamp"></i></div>
+        <h3 id="cert-view-title">Official NGO Registration Document</h3>
+        <p id="cert-view-org">St. Jude Homeless Refuge &bull; Municipal Non-Profit Accreditation</p>
+      </div>
+      <div style="border: 2px dashed #cbd5e1; border-radius: 12px; overflow: hidden; max-height: 400px; margin-bottom: 20px;">
+        <img src="" id="cert-view-img" alt="Official Certificate" style="width: 100%; height: 100%; object-fit: contain; background: #f8fafc;">
+      </div>
+      <div class="modal-btn-row" id="cert-action-buttons">
+        <!-- Injected dynamically with Approve / Reject buttons -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-stack" id="toast-stack"></div>
+
+  <!-- Leaflet Map JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Main Frontend Application Logic JS (3-File Architecture) -->
+  <script src="app.js"></script>
+  <script>
+  (function(){var t=document.querySelectorAll('.goal-card,.diff-card,.step-card,.role-bento-card,.testimonial-card,.counter-card,.section-header');
+  if(!('IntersectionObserver' in window)){return}
+  var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.1});
+  t.forEach(function(el){el.classList.add('reveal');io.observe(el)});})();
+  </script>
+</body>
+</html>

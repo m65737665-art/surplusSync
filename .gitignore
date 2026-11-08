@@ -1,11 +1,31 @@
-.htaccess
-css.php
-rpc/
-sites/site*/admin/
-sites/site*/private/
-sites/site*/public/admin/
-sites/site*/public/setup/
-sites/site*/public/theme/
-textpattern/
-HISTORY.txt
-README.txt
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Local Configuration / Environment Overrides
+.env
+.env.local
+config.local.php
+
+# Server & PHP Logs
+*.log
+error_log
+access_log
+
+# Uploaded User Content (keeps the uploads directory via .gitkeep)
+uploads/*
+!uploads/.gitkeep
+
+# Archives and Temporary Backups
+*.zip
+*.tar.gz
+*.rar
+*.bak
+*.tmp
