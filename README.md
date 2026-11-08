@@ -186,6 +186,3 @@ You can test any role with **1-click** using the top-right **"Role Switcher"** b
 
 ---
 
-## 📜 License & Acknowledgements
-- Developed for University Final Year Project evaluation.
-- Synthesized with the architectural best practices of **SurplusSync** and **ReTray**.
